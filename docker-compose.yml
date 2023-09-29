@@ -1,0 +1,33 @@
+version: '3.1'
+
+services:
+  web:
+    build: .
+    volumes:
+      - ./projeto1:/var/www/html/projeto1
+      - ./projeto2:/var/www/html/projeto2
+
+    ports:
+      - 8080:80
+    environment:
+      - SERVER_NAME=localhost
+
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      UPLOAD_LIMIT: 128M
+    ports:
+      - 8081:80
+volumes:
+  mysql-data:
